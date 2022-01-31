@@ -84,13 +84,65 @@ def shove_dict_to_file():
             v=v.replace("'","")
             result=key+":"+v+"\n"
             f.write(result)
+#search
+def search_no():
+    dict_entries()
+    no_search=entries.get(search_entry.get(),"This contact is not available")
+    search_name_label=Label(search_frame,text=search_entry.get()+':')
+    search_name_label.grid(row=2,column=0)
+    for i in no_search:
+        searched_label=Label(search_frame,text=i)
+        searched_label.grid(row=3,column=1+no_search.index(i))
+
+def search():
+    global search_frame
+    global search_entry
+    dict_entries()
+    del_frames()
+    menu_frame.pack_forget()
+    search_frame=LabelFrame(root,text="Search",padx=100,pady=80,bg="grey",relief=SUNKEN)
+    search_frame.pack()
+
+    #user input for search
+    search_label=Label(search_frame,text="Name: ")
+    search_label.grid(row=0,column=0)
+    search_entry=Entry(search_frame)
+    search_entry.grid(row=0,column=1,columnspan=3)
+    search_button=Button(search_frame,text='Enter',command=search_no)
+    search_button.grid(row=1,column=4)
+
+
+def sort():
+    dict_entries()
+    del_frames()
+    menu_frame.pack_forget()
+    sort_frame=LabelFrame(root,text="ALL CONTACTS",padx=100,pady=80,bg="grey",relief=SUNKEN)
+    sort_frame.pack()
+    
+    #sorting
+    key_list=list(entries.keys())
+    key_list.sort()
+    for i in key_list:
+        name_label=Label(sort_frame,text=i, borderwidth=1, relief="solid",bg='black',fg='white')
+        posx,posy=key_list.index(i),0
+        name_label.grid(row=posx,column=posy)
+        for j in entries[i]:
+            for k in j:
+                no_label=Label(sort_frame,text=k+'\n', borderwidth=1, relief="solid",width=15)
+                posy=j.index(k)+2
+                no_label.grid(row=posx,column=posy)
+
+    #slider
+    '''vertical=Scale(sort_frame,from_=0,to=100)
+    vertical.grid(row=0,column=10,command=slide)'''
+    
             
 
 # all function buttons
 
 button_insert=Button(menu_frame,text="Add a new entry",padx=50,pady=10,fg="blue",command=insert_entry)
-button_search=Button(menu_frame,text="Search an entry",padx=50,pady=10,fg="blue")
-button_sorted=Button(menu_frame,text="Display entries in sorted order",padx=50,pady=10,fg="blue")
+button_search=Button(menu_frame,text="Search an entry",padx=50,pady=10,fg="blue",command=search)
+button_sorted=Button(menu_frame,text="Display entries in sorted order",padx=50,pady=10,fg="blue",command=sort)
 button_del=Button(menu_frame,text="Delete an entry",padx=50,pady=10,fg="blue")
 
 button_insert.pack()
