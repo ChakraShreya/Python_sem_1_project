@@ -4,6 +4,7 @@ from PIL import ImageTk,Image
 root=Tk()
 root.title("Phone Book")
 root.geometry("800x600")
+root.configure(bg="yellow")
 
 # phonebook image displaying
 
