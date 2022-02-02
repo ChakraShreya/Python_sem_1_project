@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import ImageTk,Image
+from tkinter import messagebox as mb
 
 root=Tk()
 root.title("Phone Book")
@@ -59,15 +60,21 @@ def insert_entry():
     number.grid(row=3,column=0)
 
     def insert_click(nm,nn):
-        dict_entries()
-        nm=str(nm)
-        nn=str(nn)
-        if(nm in entries):
-            entries[nm]+=[nn]
+        if not(nm) or not(nn):
+            if mb.askyesno("Empty Entry",'Would you like to fill the empty entries?'):
+                pass
+            else:
+                root.destroy()
         else:
-            entries.update({nm:[nn]})
-        shove_dict_to_file()
-        insert_message=Label(insert_frame,text="Your entry has been inserted").grid(row=5,column=0)
+            dict_entries()
+            nm=str(nm)
+            nn=str(nn)
+            if(nm in entries):
+                entries[nm]+=[nn]
+            else:
+                entries.update({nm:[nn]})
+            shove_dict_to_file()
+            insert_message=Label(insert_frame,text="Your entry has been inserted").grid(row=5,column=0)
 
     insert_button=Button(insert_frame,text="Insert Entry",command=lambda: insert_click(name.get(),number.get())).grid(row=4,column=0)
     
@@ -88,12 +95,20 @@ def shove_dict_to_file():
 #search
 def search_no():
     dict_entries()
-    no_search=entries.get(search_entry.get(),"This contact is not available")
-    search_name_label=Label(search_frame,text=search_entry.get()+':')
-    search_name_label.grid(row=2,column=0)
-    for i in no_search:
-        searched_label=Label(search_frame,text=i)
-        searched_label.grid(row=3,column=1+no_search.index(i))
+    no_search=entries.get(search_entry.get(),"not found")
+    if no_search=='not found':
+        if mb.askyesno("Contact unavailable",'Do you want to search for another number ?'):
+            pass
+        else:
+            root.destroy()
+            #tk.raise
+
+    else:
+        search_name_label=Label(search_frame,text=search_entry.get()+':')
+        search_name_label.grid(row=2,column=0)
+        for i in no_search[0]:
+            searched_label=Label(search_frame,text=str(i)+'   ')
+            searched_label.grid(row=3,column=1+no_search[0].index(i))
 
 def search():
     global search_frame
@@ -141,10 +156,10 @@ def sort():
 
 # all function buttons
 
-button_insert=Button(menu_frame,text="Add a new entry",padx=50,pady=10,fg="blue",command=insert_entry)
-button_search=Button(menu_frame,text="Search an entry",padx=50,pady=10,fg="blue",command=search)
-button_sorted=Button(menu_frame,text="Display entries in sorted order",padx=50,pady=10,fg="blue",command=sort)
-button_del=Button(menu_frame,text="Delete an entry",padx=50,pady=10,fg="blue")
+button_insert=Button(menu_frame,text="Add a new entry",padx=50,pady=20,fg="blue",command=insert_entry)
+button_search=Button(menu_frame,text="Search an entry",padx=50,pady=20,fg="blue",command=search)
+button_sorted=Button(menu_frame,text="Display entries in sorted order",padx=50,pady=20,fg="blue",command=sort)
+button_del=Button(menu_frame,text="Delete an entry",padx=50,pady=20,fg="blue")
 
 button_insert.pack()
 button_search.pack()
