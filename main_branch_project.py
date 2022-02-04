@@ -146,6 +146,35 @@ def sort():
                 no_label=Label(sort_frame,text=k+'\n', borderwidth=1, relief="solid",width=15)
                 posy=j.index(k)+2
                 no_label.grid(row=posx,column=posy)
+                
+                
+#DELETE AN ENTRY
+def delete():
+    del_frames()
+    menu_frame.pack_forget()
+    delete_frame=LabelFrame(root,text="Delete an entry",padx=100,pady=80,bg="grey",relief=SUNKEN)
+    delete_frame.pack()
+
+
+
+    name_label=Label(delete_frame,text="Name")
+    name_label.grid(row=0,column=0)
+    name=Entry(delete_frame,width=20,borderwidth=5)
+    name.grid(row=1,column=0)
+    
+    global delete
+    def delete_click(delete):
+        del_frames()
+        dict_entries()
+        delete=str(name.get())
+        if delete in entries.keys():
+             
+              del entries[name.get()]
+              shove_dict_to_file()
+              insert_message=Label(delete_frame,text="Your entry has been deleted").grid(row=3,column=0)  
+              return delete
+
+    delete_button=Button(delete_frame,text="Delete Entry",command=lambda:delete_click(name.get())).grid(row=4,column=0)
 
     #slider
     '''vertical=Scale(sort_frame,from_=0,to=100)
@@ -158,7 +187,7 @@ def sort():
 button_insert=Button(menu_frame,text="Add a new entry",padx=50,pady=20,fg="blue",command=insert_entry)
 button_search=Button(menu_frame,text="Search an entry",padx=50,pady=20,fg="blue",command=search)
 button_sorted=Button(menu_frame,text="Display entries in sorted order",padx=50,pady=20,fg="blue",command=sort)
-button_del=Button(menu_frame,text="Delete an entry",padx=50,pady=20,fg="blue")
+button_del=Button(menu_frame,text="Delete an entry",padx=50,pady=20,fg="blue",command=delete)
 
 button_insert.pack()
 button_search.pack()
