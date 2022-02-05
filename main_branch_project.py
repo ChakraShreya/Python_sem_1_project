@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import ImageTk,Image
 from tkinter import messagebox as mb
+from tkinter import ttk
 
 root=Tk()
 root.title("Phone Book")
@@ -133,36 +134,33 @@ def sort():
     del_frames()
     menu_frame.pack_forget()
     sort_frame=LabelFrame(root,text="ALL CONTACTS",padx=100,pady=80,bg="grey",relief=SUNKEN)
-    sort_frame.pack(fill="both",expand=True)
+    sort_frame.pack()
     
     #sorting
-    key_list=list(entries.keys())
-    key_list.sort()
-    #use pack by aligning accordingly dont use grid or it wont work, for sort frame only.
-    for i in key_list:
-        name_label=Label(sort_frame,text=i, borderwidth=1, relief="solid",bg='black',fg='white')
-        posx,posy=key_list.index(i),0
-        name_label.grid(row=posx,column=posy)
-        for j in entries[i]:
-            for k in j:
-                no_label=Label(sort_frame,text=k+'\n', borderwidth=1, relief="solid",width=15)
-                posy=j.index(k)+2
-                no_label.grid(row=posx,column=posy)
 
     #scrollbar for sorting
-    scroll_frame=Frame(sort_frame)
-    scroll_frame.pack(fill=BOTH,expand=True)
+    scroll_frame=Frame(root)
+    scroll_frame.pack(fill=BOTH,expand=1)
     my_canvas=Canvas(scroll_frame)
     my_canvas.pack(side=LEFT,fill=BOTH,expand=1)
-    my_scrollbar=Scrollbar(scroll_frame,orient=VERTICAL,command=my_canvas.yview)
+    my_scrollbar=ttk.Scrollbar(scroll_frame,orient=VERTICAL,command=my_canvas.yview)
     my_scrollbar.pack(side=RIGHT,fill=Y)
     my_canvas.configure(yscrollcommand=my_scrollbar.set)
     my_canvas.bind('<Configure>', lambda e:my_canvas.configure(scrollregion=my_canvas.bbox("all")))
     another_frame=Frame(my_canvas)
     my_canvas.create_window((0,0),window=another_frame,anchor="nw")
 
-                
-                
+    for stuff in sorted(entries.items()):
+        name=str(stuff)
+        name=name.replace("(","")
+        name=name.replace(")","")
+        name=name.replace("[","")
+        name=name.replace("]","")
+        name=name.replace("'","")
+        name=name.replace(",","")
+        name=Label(another_frame,text=name,fg="purple")
+        name.pack()
+
 #DELETE AN ENTRY
 def delete():
     del_frames()
