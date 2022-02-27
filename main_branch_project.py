@@ -1,5 +1,5 @@
 from tkinter import *
-from PIL import ImageTk,Image
+#from PIL import ImageTk,Image
 from tkinter import messagebox as mb
 
 root=Tk()
@@ -10,12 +10,12 @@ root.configure(bg="yellow")
 # phonebook image displaying
 
 root.iconbitmap("phone_ico.ico")
-phoneBook_img=Image.open("phonebook_img.png")
+'''phoneBook_img=Image.open("phonebook_img.png")
 resized_img=phoneBook_img.resize((100,100),Image.ANTIALIAS)
 img=ImageTk.PhotoImage(resized_img)
 ImageLabel=Label(image=img)
 ImageLabel.pack()
-
+'''
 # menu_frame
 
 menu_frame=LabelFrame(root,text="MENU",padx=100,pady=80,bg="grey",relief=SUNKEN)
@@ -60,11 +60,25 @@ def insert_entry():
     number.grid(row=3,column=0)
 
     def insert_click(nm,nn):
+        #no empty entries
         if not(nm) or not(nn):
             if mb.askyesno("Empty Entry",'Would you like to fill the empty entries?'):
                 pass
             else:
                 root.destroy()
+        #digits only no alphabets
+        elif not(nn.isdigit()):
+            if mb.askyesno("Invalid Phone Number",'Kindly enter numbers only. \nWould you like to re-enter a valid number?'):
+                pass
+            else:
+                root.destroy()
+        #10 digits only
+        elif len(nn)!=10:
+            if mb.askyesno("Invalid Phone Number",'Kindly enter a 10digit phone number only. \nWould you like to re-enter a valid number?'):
+                pass
+            else:
+                root.destroy()
+
         else:
             dict_entries()
             nm=str(nm)
