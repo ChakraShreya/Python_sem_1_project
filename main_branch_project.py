@@ -60,11 +60,25 @@ def insert_entry():
     number.grid(row=3,column=0)
 
     def insert_click(nm,nn):
+        #no empty entries
         if not(nm) or not(nn):
             if mb.askyesno("Empty Entry",'Would you like to fill the empty entries?'):
                 pass
             else:
                 root.destroy()
+        #digits only no alphabets
+        elif not(nn.isdigit()):
+            if mb.askyesno("Invalid Phone Number",'Kindly enter numbers only. \nWould you like to re-enter a valid number?'):
+                pass
+            else:
+                root.destroy()
+        #10 digits only
+        elif len(nn)!=10:
+            if mb.askyesno("Invalid Phone Number",'Kindly enter a 10digit phone number only. \nWould you like to re-enter a valid number?'):
+                pass
+            else:
+                root.destroy()
+
         else:
             dict_entries()
             nm=str(nm)
