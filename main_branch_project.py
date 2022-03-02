@@ -1,10 +1,11 @@
 from tkinter import *
+from turtle import bgcolor, color
 from PIL import ImageTk,Image
 from tkinter import messagebox as mb
 
 root=Tk()
 root.title("Phone Book")
-root.geometry("800x600")
+root.geometry("1000x700")
 root.configure(bg="yellow")
 
 # phonebook image displaying
@@ -18,7 +19,7 @@ ImageLabel.pack()
 
 # menu_frame
 
-menu_frame=LabelFrame(root,text="MENU",padx=100,pady=80,bg="grey",relief=SUNKEN)
+menu_frame=LabelFrame(root,text="MENU",padx=100,pady=80,bg="cyan",relief=SUNKEN)
 menu_frame.pack()
 
 # delete previous frames
@@ -46,7 +47,7 @@ def dict_entries():
 def insert_entry():
     del_frames()
     menu_frame.pack_forget()
-    insert_frame=LabelFrame(root,text="INSERT ENTRY",padx=100,pady=80,bg="grey",relief=SUNKEN)
+    insert_frame=LabelFrame(root,text="INSERT ENTRY",padx=100,pady=80,bg="cyan",relief=SUNKEN)
     insert_frame.pack()
     # namelabel
     name_label=Label(insert_frame,text="Name")
@@ -130,7 +131,7 @@ def search():
     dict_entries()
     del_frames()
     menu_frame.pack_forget()
-    search_frame=LabelFrame(root,text="Search",padx=100,pady=80,bg="grey",relief=SUNKEN)
+    search_frame=LabelFrame(root,text="Search",padx=100,pady=80,bg="cyan",relief=SUNKEN)
     search_frame.pack()
 
     #user input for search
@@ -146,7 +147,7 @@ def sort():
     dict_entries()
     del_frames()
     menu_frame.pack_forget()
-    sort_frame=LabelFrame(root,text="ALL CONTACTS",padx=100,pady=80,bg="grey",relief=SUNKEN)
+    sort_frame=LabelFrame(root,text="ALL CONTACTS",padx=100,pady=80,bg="cyan",relief=SUNKEN)
     sort_frame.pack(side="top",fill="both",expand=True)
     
     #sorting
@@ -188,27 +189,66 @@ def delete():
     name=Entry(delete_frame,width=20,borderwidth=5)
     name.grid(row=1,column=0)
     
+    
+    def del_a_no(n_to_be_del,nd_list,name):
+        dict_entries()
+        for element in nd_list:
+            if n_to_be_del==element:
+                 nd_list.remove(element)
+
+        del entries[name]
+        entries[name]=nd_list
+                         
+        insert_message=Label(delete_frame,text="Your entry has been deleted").grid(row=3,column=0) 
+        shove_dict_to_file()
+    
+    def temp(s,nd_list,name):
+        del_a_no(s,nd_list,name)
+
+    
     global delete
-    def delete_click(delete):
+    def delete_click():
         del_frames()
         dict_entries()
         delete=str(name.get())
         if delete in entries.keys():
-             
-              del entries[name.get()]
-              shove_dict_to_file()
-              insert_message=Label(delete_frame,text="Your entry has been deleted").grid(row=3,column=0)  
-              return delete
+            if mb.askyesno("DELETE","Do you want to delete entire entry?"):
 
-    delete_button=Button(delete_frame,text="Delete Entry",command=lambda:delete_click(name.get())).grid(row=4,column=0)
+                 del entries[name.get()]
+                 shove_dict_to_file()
+                 insert_message=Label(delete_frame,text="Your entry has been deleted").grid(row=3,column=0) 
+                 pass
+                 
+            else:
+                def delete_no():
+                    dict_entries()
+                    nd=entries[name.get()]
+                    nd=str(nd)
+                    nd=nd.replace('[','')
+                    nd=nd.replace(']','')
+                    nd=nd.replace(" ","")
+                    nd=nd.replace("'","")
+                    nd_list=[]
+                    nd_list=nd.split(",")
+
+                    for i in nd_list:                  
+                       delete_bt=Button(delete_frame,text=str(i)+'   ',command=lambda k=str(i): temp(k,nd_list,name.get()))
+                       delete_bt.grid(row=3,column=1+nd_list.index(i))
+                delete_no()
+                     
+
+
+
+
+    delete_button=Button(delete_frame,text="Delete Entry",command=lambda:delete_click()).grid(row=4,column=0)
     
 
 # all function buttons
 
-button_insert=Button(menu_frame,text="Add a new entry",padx=50,pady=20,fg="blue",command=insert_entry)
-button_search=Button(menu_frame,text="Search an entry",padx=50,pady=20,fg="blue",command=search)
-button_sorted=Button(menu_frame,text="Display entries in sorted order",padx=50,pady=20,fg="blue",command=sort)
-button_del=Button(menu_frame,text="Delete an entry",padx=50,pady=20,fg="blue",command=delete)
+button_insert=Button(menu_frame,text="Add a new entry",font="Times 15",padx=50,pady=20,fg="blue",bg='orange',command=insert_entry)
+button_search=Button(menu_frame,text="Search an entry",font="Times 15",padx=50,pady=20,fg="blue",bg='orange',command=search)
+button_sorted=Button(menu_frame,text="Display entries in sorted order",font="Times 15",padx=50,pady=20,fg="blue",bg='orange',command=sort)
+button_del=Button(menu_frame,text="Delete an entry",font="Times 15",padx=50,pady=20,fg="blue",bg='orange',command=delete)
 
 button_insert.pack()
 button_search.pack()
@@ -218,7 +258,7 @@ button_del.pack()
 
 
 
-button_quit=Button(root,text="Exit",padx=10,pady=10,fg="red",command=root.quit)
+button_quit=Button(root,text="Exit",padx=10,pady=10,fg="white",bg='red',font="Times 15",command=root.quit)
 button_quit.pack()
 
 
