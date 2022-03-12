@@ -6,7 +6,7 @@ from tkinter import messagebox as mb
 root=Tk()
 root.title("Phone Book")
 root.geometry("1000x700")
-root.configure(bg="yellow")
+root.configure(bg="dark green")
 
 # phonebook image displaying
 
@@ -19,7 +19,7 @@ ImageLabel.pack()
 
 # menu_frame
 
-menu_frame=LabelFrame(root,text="MENU",padx=100,pady=80,bg="cyan",relief=SUNKEN)
+menu_frame=LabelFrame(root,text="MENU",padx=100,pady=80,bg="light green",relief=SUNKEN)
 menu_frame.pack()
 
 # delete previous frames
@@ -47,17 +47,17 @@ def dict_entries():
 def insert_entry():
     del_frames()
     menu_frame.pack_forget()
-    insert_frame=LabelFrame(root,text="INSERT ENTRY",padx=100,pady=80,bg="cyan",relief=SUNKEN)
+    insert_frame=LabelFrame(root,text="INSERT ENTRY",font='Times 13',padx=100,pady=80,bg="light green",relief=SUNKEN)
     insert_frame.pack()
     # namelabel
-    name_label=Label(insert_frame,text="Name")
+    name_label=Label(insert_frame,text="Name",font='Times 13',fg="blue",bg='orange')
     name_label.grid(row=0,column=0)
-    name=Entry(insert_frame,width=20,borderwidth=5)
+    name=Entry(insert_frame,width=20,borderwidth=5,bg="cyan")
     name.grid(row=1,column=0)
     # numberlabel
-    number_label=Label(insert_frame,text="Number")
+    number_label=Label(insert_frame,text="Number",font='Times 13',fg="blue",bg='orange')
     number_label.grid(row=2,column=0)
-    number=Entry(insert_frame,width=20,borderwidth=5)
+    number=Entry(insert_frame,width=20,borderwidth=5,bg="cyan")
     number.grid(row=3,column=0)
 
     def insert_click(nm,nn):
@@ -89,9 +89,9 @@ def insert_entry():
             else:
                 entries.update({nm:[nn]})
             shove_dict_to_file()
-            insert_message=Label(insert_frame,text="Your entry has been inserted").grid(row=5,column=0)
+            insert_message=Label(insert_frame,text="Your entry has been inserted",font='Times 13').grid(row=5,column=0)
 
-    insert_button=Button(insert_frame,text="Insert Entry",command=lambda: insert_click(name.get(),number.get())).grid(row=4,column=0)
+    insert_button=Button(insert_frame,text="Insert Entry",font='Times 13',fg="red",bg='gray',command=lambda: insert_click(name.get(),number.get())).grid(row=4,column=0)
     
 
 def shove_dict_to_file():
@@ -112,17 +112,16 @@ def search_no():
     dict_entries()
     no_search=entries.get(search_entry.get(),"not found")
     if no_search=='not found':
-        if mb.askyesno("Contact unavailable",'Do you want to search for another number ?'):
+        if mb.askyesno("Contact unavailable",'Do you want to search for another number ?',font='Times 13'):
             pass
         else:
             root.destroy()
-            #tk.raise
 
     else:
-        search_name_label=Label(search_frame,text=search_entry.get()+':')
+        search_name_label=Label(search_frame,text=search_entry.get()+':',fg="blue",bg='orange',font='Times 13')
         search_name_label.grid(row=2,column=0)
         for i in no_search[0]:
-            searched_label=Label(search_frame,text=str(i)+'   ')
+            searched_label=Label(search_frame,text=str(i)+'   ',fg="blue",bg='orange',font='Times 13')
             searched_label.grid(row=3,column=1+no_search[0].index(i))
 
 def search():
@@ -131,15 +130,15 @@ def search():
     dict_entries()
     del_frames()
     menu_frame.pack_forget()
-    search_frame=LabelFrame(root,text="Search",padx=100,pady=80,bg="cyan",relief=SUNKEN)
+    search_frame=LabelFrame(root,text="Search",font='Times 13',padx=100,pady=80,bg="light green",relief=SUNKEN)
     search_frame.pack()
 
     #user input for search
-    search_label=Label(search_frame,text="Name: ")
+    search_label=Label(search_frame,text="Name: ",fg="blue",bg='orange',font='Times 13')
     search_label.grid(row=0,column=0)
-    search_entry=Entry(search_frame)
+    search_entry=Entry(search_frame,bg="cyan")
     search_entry.grid(row=0,column=1,columnspan=3)
-    search_button=Button(search_frame,text='Enter',command=search_no)
+    search_button=Button(search_frame,text='Enter',fg="blue",bg='orange',command=search_no)
     search_button.grid(row=1,column=4)
 
 
@@ -147,31 +146,31 @@ def sort():
     dict_entries()
     del_frames()
     menu_frame.pack_forget()
-    sort_frame=LabelFrame(root,text="ALL CONTACTS",padx=100,pady=80,bg="cyan",relief=SUNKEN)
+    sort_frame=LabelFrame(root,text="ALL CONTACTS",font='Times 13',padx=100,pady=80,bg="light green",relief=SUNKEN)
     sort_frame.pack(side="top",fill="both",expand=True)
     
     #sorting
 
     scroll_frame=Frame(root)
     scroll_frame.pack(fill=BOTH,expand=1)
-    my_canvas=Canvas(scroll_frame,bg="grey")
+    my_canvas=Canvas(scroll_frame,bg="light green")
     my_canvas.pack(side=LEFT,fill=BOTH,expand=1)
     my_scrollbar=Scrollbar(scroll_frame,orient=VERTICAL,command=my_canvas.yview)
     my_scrollbar.pack(side=RIGHT,fill=Y)
     my_canvas.configure(yscrollcommand=my_scrollbar.set)
     my_canvas.bind('<Configure>', lambda e:my_canvas.configure(scrollregion=my_canvas.bbox("all")))
-    another_frame=Frame(my_canvas,bg="grey")
+    another_frame=Frame(my_canvas,bg="light green")
     my_canvas.create_window((0,0),window=another_frame,anchor="nw")
 
     key_list=list(entries.keys())
     key_list.sort()
     for i in key_list:
-        name_label=Label(another_frame,text=i, borderwidth=1, relief="solid",fg='purple')
+        name_label=Label(another_frame,text=i, borderwidth=1, relief="solid",bg='yellow',fg='dark green',font='Times 13')
         posx,posy=key_list.index(i),0
         name_label.grid(row=posx,column=posy)
         for j in entries[i]:
             for k in j:
-                no_label=Label(another_frame,text=k+'\n', borderwidth=1, relief="solid",width=15,fg="blue")
+                no_label=Label(another_frame,text=k+'\n', borderwidth=1, relief="solid",width=15,bg='dark green',fg='yellow',font='Times 13')
                 posy=j.index(k)+2
                 no_label.grid(row=posx,column=posy)
 
@@ -179,14 +178,14 @@ def sort():
 def delete():
     del_frames()
     menu_frame.pack_forget()
-    delete_frame=LabelFrame(root,text="Delete an entry",padx=100,pady=80,bg="grey",relief=SUNKEN)
+    delete_frame=LabelFrame(root,text="Delete an entry",font='Times 13',padx=100,pady=80,bg="light green",relief=SUNKEN)
     delete_frame.pack()
 
 
 
-    name_label=Label(delete_frame,text="Name")
+    name_label=Label(delete_frame,text="Name",font='Times 13',fg="blue",bg='orange')
     name_label.grid(row=0,column=0)
-    name=Entry(delete_frame,width=20,borderwidth=5)
+    name=Entry(delete_frame,width=20,borderwidth=5,bg="cyan")
     name.grid(row=1,column=0)
     
     
@@ -199,7 +198,7 @@ def delete():
         del entries[name]
         entries[name]=nd_list
                          
-        insert_message=Label(delete_frame,text="Your entry has been deleted").grid(row=3,column=0) 
+        insert_message=Label(delete_frame,text="Your entry has been deleted",font='Times 13').grid(row=3,column=0) 
         shove_dict_to_file()
     
     def temp(s,nd_list,name):
@@ -216,7 +215,7 @@ def delete():
 
                  del entries[name.get()]
                  shove_dict_to_file()
-                 insert_message=Label(delete_frame,text="Your entry has been deleted").grid(row=3,column=0) 
+                 insert_message=Label(delete_frame,text="Your entry has been deleted",font='Times 13',fg="blue",bg='orange').grid(row=3,column=0) 
                  pass
                  
             else:
@@ -232,7 +231,7 @@ def delete():
                     nd_list=nd.split(",")
 
                     for i in nd_list:                  
-                       delete_bt=Button(delete_frame,text=str(i)+'   ',command=lambda k=str(i): temp(k,nd_list,name.get()))
+                       delete_bt=Button(delete_frame,text=str(i)+'   ',command=lambda k=str(i): temp(k,nd_list,name.get(),fg="blue",bg='orange',font='Times 13'))
                        delete_bt.grid(row=3,column=1+nd_list.index(i))
                 delete_no()
                      
@@ -240,7 +239,7 @@ def delete():
 
 
 
-    delete_button=Button(delete_frame,text="Delete Entry",command=lambda:delete_click()).grid(row=4,column=0)
+    delete_button=Button(delete_frame,text="Delete Entry",font='Times 13',command=lambda:delete_click(),fg="blue",bg='orange').grid(row=4,column=0)
     
 
 # all function buttons
@@ -256,12 +255,8 @@ button_sorted.pack()
 button_del.pack()
 
 
-
-
 button_quit=Button(root,text="Exit",padx=10,pady=10,fg="white",bg='red',font="Times 15",command=root.quit)
 button_quit.pack()
-
-
 
 
 root.mainloop()
